@@ -15,7 +15,7 @@ private:
         using List = std::deque<Ptr>;
         using Map = std::map<char, List>;
 
-        Map next;//一开始是用multimap的，然而写出来的代码格外丑，于是就改成了这样
+        Map next;
 
         [[nodiscard]] bool has(char key) const;
         List& get(char key);

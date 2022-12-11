@@ -3,4 +3,14 @@ project(RegularExpressionRecognizer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(RegularExpressionRecognizer main.cpp Regular.cpp Regular.h NFAutomata.cpp NFAutomata.h DFAutomata.cpp DFAutomata.h)
+include_directories(DFAutomata NFAutomata Regular)
+
+add_executable(RegularExpressionRecognizer
+        demo.cpp
+        Regular/Regular.cpp
+        Regular/Regular.h
+        NFAutomata/NFAutomata.cpp
+        NFAutomata/NFAutomata.h
+        DFAutomata/DFAutomata.cpp
+        DFAutomata/DFAutomata.h
+        )

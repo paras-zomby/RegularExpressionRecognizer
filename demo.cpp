@@ -2,7 +2,7 @@
 #include <iostream>
 
 int main() {
-    Regular reg = *(Regular::character('_') | Regular::alpha());
+    Regular reg = *(Regular::character('_') | Regular::alpha()) + *Regular::digit();
     auto nfa = reg.make();
     auto dfa = nfa.compileDFA();
     std::cout << nfa.match("4_asd") << std::endl;
