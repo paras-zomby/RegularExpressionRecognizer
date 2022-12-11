@@ -1,9 +1,9 @@
 #include "Regular.h"
 
-std::array<std::shared_ptr<Regular::SingleChar>, 128> Regular::makeCharTable() {
-    std::array<std::shared_ptr<SingleChar>, 128> charTable;
+std::array<std::shared_ptr<Regular::Char>, 128> Regular::makeCharTable() {
+    std::array<std::shared_ptr<Char>, 128> charTable;
     for (unsigned char i = 0; i < 128; ++i) {
-        charTable[i] = std::make_shared<SingleChar>();
+        charTable[i] = std::make_shared<Char>();
         charTable[i]->ch = i;
     }
 
@@ -11,15 +11,15 @@ std::array<std::shared_ptr<Regular::SingleChar>, 128> Regular::makeCharTable() {
 }
 
 Regular Regular::range(char begin, char end) {
-    Regular result = Char(begin);
+    Regular result = character(begin);
     for (char i = begin + 1; i <= end; ++i) {
-        result = result | Char(i);
+        result = result | character(i);
     }
     return result;
 }
 
 Regular Regular::operator+() const {
-    auto nodet = std::make_shared<Pos>();
+    auto nodet = std::make_shared<PClosure>();
     nodet->node = this->node;
     return Regular(node);
 }
@@ -44,12 +44,12 @@ Regular Regular::operator|(const Regular &other) const {
     return Regular(node);
 }
 
-Regular Regular::Char(char ch) {
+Regular Regular::character(char ch) {
     static auto charTable = makeCharTable();
     return Regular(charTable[ch]);
 }
 Regular Regular::nil() {
-    return Char('\0');
+    return character('\0');
 }
 Regular Regular::digit() {
     static auto result = range('0', '9');
@@ -76,13 +76,13 @@ Regular &Regular::operator|=(const Regular &other) {
     return *this = *this | other;
 }
 
-NFAutomata Regular::SingleChar::make() const {
+NFAutomata Regular::Char::make() const {
     NFAutomata result;
     result.start->get(ch).push_back(result.accept);
     return result;
 }
 
-NFAutomata Regular::Pos::make() const {
+NFAutomata Regular::PClosure::make() const {
     NFAutomata inner = node->make();
     NFAutomata result;
     result.start = inner.start;

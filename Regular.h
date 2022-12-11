@@ -9,15 +9,15 @@ private:
             [[nodiscard]] virtual NFAutomata make() const = 0;
         };
 
-    struct SingleChar final : public Regular::Node {
+    struct Char final : public Regular::Node {
         char ch = 0;
-        SingleChar() = default;
+        Char() = default;
         [[nodiscard]] NFAutomata make() const override;
     };
-    struct Pos final : public Regular::Node {
+    struct PClosure final : public Regular::Node {
         std::shared_ptr<Node> node;
 
-        Pos() = default;
+        PClosure() = default;
         [[nodiscard]] NFAutomata make() const override;
     };
 
@@ -53,13 +53,13 @@ private:
     std::shared_ptr<Node> node;
 
 private:
-    static std::array<std::shared_ptr<SingleChar>, 128> makeCharTable();
+    static std::array<std::shared_ptr<Char>, 128> makeCharTable();
     static Regular range(char begin, char end);
 
 public:
     //以下几个函数用来构造最常用的几种正则表达式
     static Regular nil();//空语言
-    static Regular Char(char ch);//单个确定字符构成的语言
+    static Regular character(char ch);//单个确定字符构成的语言
     static Regular digit();//0-9的数字
     static Regular alpha();//英文字母
     static Regular lower();//小写字母
