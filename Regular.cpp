@@ -21,7 +21,7 @@ Regular Regular::range(char begin, char end) {
 Regular Regular::operator+() const {
     auto nodet = std::make_shared<PClosure>();
     nodet->node = this->node;
-    return Regular(node);
+    return Regular(nodet);
 }
 
 Regular Regular::operator*() const {
@@ -33,7 +33,7 @@ Regular Regular::operator+(const Regular &other) const {
     nodet->node[0] = this->node;
     nodet->node[1] = other.node;
 
-    return Regular(node);
+    return Regular(nodet);
 }
 
 Regular Regular::operator|(const Regular &other) const {
@@ -41,7 +41,7 @@ Regular Regular::operator|(const Regular &other) const {
     nodet->node[0] = this->node;
     nodet->node[1] = other.node;
 
-    return Regular(node);
+    return Regular(nodet);
 }
 
 Regular Regular::character(char ch) {

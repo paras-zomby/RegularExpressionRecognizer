@@ -4,8 +4,10 @@
 #include <memory>
 #include <deque>
 #include <map>
+#include <unordered_set>
 
 class NFAutomata {
+private:
     struct State {
         using Ptr = std::shared_ptr<State>;
         using List = std::deque<Ptr>;
@@ -16,6 +18,16 @@ class NFAutomata {
         [[nodiscard]] bool has(char key) const;
         List& get(char key);
     };
+
+private:
+    using Set = std::unordered_set<std::shared_ptr<State>>;
+    static void closure(const std::shared_ptr<State>& state, Set& set);
+    static void closure(const Set& from, Set& to);
+    static void move(char key, const Set& from, Set& to);
+public:
+    std::shared_ptr<State> start;
+    std::shared_ptr<State> accept;
+
 public:
     NFAutomata():
         start(new State()),
@@ -26,8 +38,7 @@ public:
         std::shared_ptr<State>& accept
     ) : start(start), accept(accept) {}
 
-    std::shared_ptr<State> start;
-    std::shared_ptr<State> accept;
+    [[nodiscard]] bool match(const std::string& key) const;
 };
 
 #endif //REGULAREXPRESSIONRECOGNIZER_NFAUTOMATA_H
