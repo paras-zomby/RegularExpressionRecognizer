@@ -76,14 +76,14 @@ Regular &Regular::operator|=(const Regular &other) {
     return *this = *this | other;
 }
 
-NFAutomata Regular::Char::make() const {
+NFAutomata Regular::Char::compile() const {
     NFAutomata result;
     result.start->get(ch).push_back(result.accept);
     return result;
 }
 
-NFAutomata Regular::PClosure::make() const {
-    NFAutomata inner = node->make();
+NFAutomata Regular::PClosure::compile() const {
+    NFAutomata inner = node->compile();
     NFAutomata result;
     result.start = inner.start;
 
@@ -94,10 +94,10 @@ NFAutomata Regular::PClosure::make() const {
     return result;
 }
 
-NFAutomata Regular::And::make() const {
+NFAutomata Regular::And::compile() const {
     NFAutomata inner[2];
-    inner[0] = node[0]->make();
-    inner[1] = node[1]->make();
+    inner[0] = node[0]->compile();
+    inner[1] = node[1]->compile();
     NFAutomata result(
         inner[0].start,
         inner[1].accept
@@ -106,10 +106,10 @@ NFAutomata Regular::And::make() const {
     return result;
 }
 
-NFAutomata Regular::Or::make() const {
+NFAutomata Regular::Or::compile() const {
     NFAutomata inner[2];
-    inner[0] = node[0]->make();
-    inner[1] = node[1]->make();
+    inner[0] = node[0]->compile();
+    inner[1] = node[1]->compile();
 
     NFAutomata result;
     auto& list = result.start->get('\0');

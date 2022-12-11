@@ -6,40 +6,40 @@
 class Regular {
 private:
     struct Node {
-            [[nodiscard]] virtual NFAutomata make() const = 0;
+            [[nodiscard]] virtual NFAutomata compile() const = 0;
         };
 
     struct Char final : public Regular::Node {
         char ch = 0;
         Char() = default;
-        [[nodiscard]] NFAutomata make() const override;
+        [[nodiscard]] NFAutomata compile() const override;
     };
     struct PClosure final : public Regular::Node {
         std::shared_ptr<Node> node;
 
         PClosure() = default;
-        [[nodiscard]] NFAutomata make() const override;
+        [[nodiscard]] NFAutomata compile() const override;
     };
 
     struct And final : public Regular::Node {
         std::shared_ptr<Node> node[2];
 
         And() = default;
-        [[nodiscard]] NFAutomata make() const override;
+        [[nodiscard]] NFAutomata compile() const override;
     };
 
     struct Or final : public Regular::Node {
         std::shared_ptr<Node> node[2];
 
         Or() = default;
-        [[nodiscard]] NFAutomata make() const override;
+        [[nodiscard]] NFAutomata compile() const override;
     };
 public:
 
     explicit Regular (std::shared_ptr<Node> node):
     node(std::move(node)) {}
 
-    inline NFAutomata make() const {return node->make(); };
+    inline NFAutomata compileNFA() const {return node->compile(); };
 
     Regular operator+() const;//正闭包运算
     Regular operator*() const;//闭包运算
