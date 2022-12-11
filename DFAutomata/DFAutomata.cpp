@@ -3,8 +3,7 @@
 
 bool DFAutomata::match(const std::string &key) const {
     int node_id = 0;
-    for(auto& ch: key)
-    {
+    for (auto &ch: key) {
         auto iter = nodes[node_id].next.find(ch);
         if (iter == nodes[node_id].next.end() || iter->second == nodes.size() - 1)
             return false;
@@ -31,17 +30,9 @@ void DFAutomata::make_connection(int from_id, char character, int to_id) {
 }
 
 void DFAutomata::check(int end_node_id, const std::unordered_set<char> &alpha_table) {
-    nodes.emplace_back();
-    for (auto &ch: alpha_table) {
-        nodes.back().next.insert({ch, nodes.size() - 1});
-    }
     for (int i = 0; i < nodes.size() - 1; ++i) {
         if (nodes[i].node_id.find(end_node_id) != nodes[i].node_id.end())
             accept_nodes.emplace(i);
-        for (auto &ch: alpha_table) {
-            if (nodes[i].next.find(ch) == nodes[i].next.end())
-                    nodes[i].next.insert({ch, nodes.size() - 1});
-        }
     }
 }
 

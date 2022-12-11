@@ -58,7 +58,7 @@ bool NFAutomata::match(const std::string &key) const {
     }
     return matched;
 }
-
+#include <iostream>
 DFAutomata NFAutomata::compileDFA() const {
     DFAutomata result;
     std::map<std::shared_ptr<State>, int> id_map;
@@ -74,9 +74,13 @@ DFAutomata NFAutomata::compileDFA() const {
         auto [node_id, node_set] = queue.front();
         queue.pop();
         for (auto &key: alphaTable) {
+            end_set.clear();
+            end_set_closure.clear();
             move(key, start_set, end_set);
             closure(end_set, end_set_closure);
             int end_id;
+            if(end_set_closure.empty())
+                std::cout<<"empty end set" << std::endl;
             if(result.make_node(mapping(end_set_closure, id_map), end_id))
             {
                 queue.emplace(end_id, end_set_closure);
